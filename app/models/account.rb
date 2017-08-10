@@ -42,8 +42,8 @@ class Account < ApplicationRecord
             end
         end
     end
-    
-    def clear_suspension
+
+    def unfreeze
         return if insufficient_funds
 
         ActiveRecord::Base.transaction do

@@ -4,6 +4,8 @@ Rails.application.routes.draw do
         member do
             get '/atm', to: 'accounts#atm'
             post '/deposit', to: 'accounts#deposit'
+            post '/withdraw', to: 'accounts#withdraw'
+            post '/unfreeze', to: 'accounts#unfreeze'
         end
     end
 end

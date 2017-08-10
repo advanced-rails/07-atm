@@ -17,4 +17,26 @@ class AccountsController < ApplicationController
             redirect_to root_url
         end
     end
+
+    def withdraw
+        @account = Account.find(params[:id])
+        @account.withdraw(params[:amount].to_f)
+
+        if @account.errors.any?
+            render 'atm'
+        else
+            redirect_to root_url
+        end
+    end
+
+    def unfreeze
+        @account = Account.find(params[:id])
+        @account.unfreeze
+
+        if @account.errors.any?
+            render 'atm'
+        else
+            redirect_to root_url
+        end
+    end
 end
