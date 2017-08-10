@@ -18,9 +18,9 @@ ActiveRecord::Schema.define(version: 20170810170600) do
   create_table "accounts", force: :cascade do |t|
     t.string "name", null: false
     t.string "category", null: false
-    t.decimal "balance", default: "0.0", null: false
-    t.integer "flags", default: 0, null: false
-    t.boolean "is_suspended", default: false, null: false
+    t.decimal "balance", default: "0.0"
+    t.integer "flags", default: 0
+    t.boolean "is_suspended", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_accounts_on_name", unique: true
@@ -35,4 +35,5 @@ ActiveRecord::Schema.define(version: 20170810170600) do
     t.index ["account_id"], name: "index_transactions_on_account_id"
   end
 
+  add_foreign_key "transactions", "accounts"
 end
