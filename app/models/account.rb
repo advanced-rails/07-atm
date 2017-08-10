@@ -27,6 +27,7 @@ class Account < ApplicationRecord
     
     def withdraw(amount)
         return if amount_is_not_valid(amount)
+        return if account_is_suspended
 
         if self.balance >= amount
             ActiveRecord::Base.transaction do
@@ -42,12 +43,32 @@ class Account < ApplicationRecord
         end
     end
     
+    def clear_suspension
+        return if insufficient_funds
+
+        ActiveRecord::Base.transaction do
+            fee = 100
+            self.update!(balance: self.balance - fee, is_suspended: false)
+            Transaction.create!(amount: fee, category: 'Unfreeze', account_id: self.id)
+        end
+    end
+
     private
     
     def check_suspension
         if self.flags > 3
             self.update!(is_suspended: true, flags: 0)
         end
+    end
+
+    def insufficient_funds
+        self.errors.add(:balance, 'does not have sufficient funds') if self.balance < 100
+        self.errors.any?
+    end
+
+    def account_is_suspended
+        self.errors.add(:account, 'is suspended due to overdrafts') if self.is_suspended
+        self.errors.any?
     end
 
     def amount_is_not_valid(amount)
