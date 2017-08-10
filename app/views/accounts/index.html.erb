@@ -15,7 +15,7 @@
         <% @accounts.each do |a| %>
             <tr>
                 <td><%= a.id %></td>
-                <td><%= a.name %></td>
+                <td><%= link_to a.name, atm_account_path(a) %></td>
                 <td><%= a.category %></td>
                 <td><%= number_to_currency a.balance %></td>
                 <td><%= a.flags %></td>
