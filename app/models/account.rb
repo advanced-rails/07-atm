@@ -1,19 +1,11 @@
 class Account < ApplicationRecord
-    has_many :transactions
+    has_many :transactions, dependent: :delete_all
     validates :name, uniqueness: true
     validates :name, :category, presence: true
     after_save :check_suspension
 
-    def deposits
-        self.transactions.where(category: 'Deposit')
-    end
-
-    def withdraws
-        self.transactions.where(category: 'Withdraw')
-    end
-
-    def overdrafts
-        self.transactions.where(category: 'Overdraft')
+    def filter_transactions(category)
+        self.transactions.where(category: category)
     end
 
     def deposit(amount)
@@ -24,7 +16,7 @@ class Account < ApplicationRecord
             Transaction.create!(amount: amount, category: 'Deposit', account_id: self.id)
         end
     end
-    
+
     def withdraw(amount)
         return if amount_is_not_valid(amount)
         return if account_is_suspended
@@ -54,7 +46,7 @@ class Account < ApplicationRecord
     end
 
     private
-    
+
     def check_suspension
         if self.flags > 3
             self.update!(is_suspended: true, flags: 0)
@@ -73,7 +65,7 @@ class Account < ApplicationRecord
 
     def amount_is_not_valid(amount)
         if !amount.is_a? Numeric
-            self.errors.add(:amount, 'not a number') 
+            self.errors.add(:amount, 'not a number')
             return
         end
 

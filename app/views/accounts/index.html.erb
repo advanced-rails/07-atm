@@ -3,23 +3,33 @@
 <table class="table table-striped">
     <thead class="thead-inverse">
         <tr>
+            <th></th>
             <th>Id</th>
             <th>Name</th>
             <th>Type</th>
             <th>Balance</th>
             <th>Flags</th>
             <th>Suspended?</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         <% @accounts.each do |a| %>
             <tr>
+                <td><%= link_to 'x', account_path(a), method: :delete, class: 'btn btn-outline-danger' %></td>
                 <td><%= a.id %></td>
-                <td><%= link_to a.name, atm_account_path(a) %></td>
+                <td><%= link_to a.name, atm_account_path(a), class: 'btn btn-secondary btn-sm btn-block' %></td>
                 <td><%= a.category %></td>
                 <td><%= number_to_currency a.balance %></td>
                 <td><%= a.flags %></td>
                 <td><%= a.is_suspended %></td>
+                <td><%= link_to '+', deposits_account_path(a), class: 'btn btn-outline-success' %></td>
+                <td><%= link_to '-', withdraws_account_path(a), class: 'btn btn-outline-primary' %></td>
+                <td><%= link_to '#', overdrafts_account_path(a), class: 'btn btn-outline-info' %></td>
+                <td><%= link_to '@', unfreezes_account_path(a), class: 'btn btn-outline-warning' %></td>
             </tr>
         <% end %>
     </tbody>
